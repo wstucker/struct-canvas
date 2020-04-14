@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="1600" height="50" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+
+// Data to be passed to function
+var names = ["pkt_len", "crc", "vlan", "src", "dst", "foob"];
+var msbs =  [       21,    36,     38,    43,    51,     63];
+var lsbs =  [        0,    22,     37,    39,    44,     52];
+
+var c = document.getElementById("myCanvas");
+
+
+var rect_top = 0;
+var rect_height = 30;
+var font_height = 14;
+var font_top = (rect_height / 2) + rect_top;
+
+
+
+var ctx = c.getContext("2d");
+ctx.beginPath();
+
+ctx.font = font_height.toString().concat("px Arial");
+ctx.textAlign="center"; 
+ctx.textBaseline = "middle";
+
+
+ctx.rect(0, rect_top, c.width, rect_height);
+ctx.closePath();
+ctx.stroke();
+
+ctx.beginPath();
+
+var pixels_per_bit = c.width / (Math.max.apply(null, msbs) + 1);
+
+var last_box_x = 1;
+var required_padding = ctx.measureText("  ").width
+
+for (i = 0; i < names.length; i++) {
+	var txt = names[i];
+    var actual_txt_width = ctx.measureText(txt).width + required_padding;
+    var bit_width = msbs[i] - lsbs[i] + 1;
+    var allowed_txt_width = pixels_per_bit * bit_width;
+    
+    if (actual_txt_width > allowed_txt_width) {
+    	txt = "*";
+    }
+
+	//var box_width = actual_txt_width;
+    var box_width = allowed_txt_width;
+	var x_start = last_box_x;
+    var x_stop = x_start + box_width;
+    var x_center = x_start + box_width / 2 ;
+    last_box_x = x_stop;
+    
+
+	ctx.rect(x_start + 1, rect_top + 1, box_width - 2, rect_height - 2);
+	
+    ctx.fillText(txt, x_center, font_top);
+    //ctx.fillText(x_center.toString(), i*150, font_top);
+}
+
+// Outer box
+
+ctx.closePath();
+ctx.stroke();
+</script> 
+
+</body>
+</html>
