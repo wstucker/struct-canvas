@@ -2,13 +2,33 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="1400" height="50" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+<p>Example0 has a single struct defintion rendered.</p>  
+<canvas id="example0" width="1400" height="50">Your browser does not support the HTML5 canvas tag.</canvas>
+<br/>
+<p>Example1 has a two struct defintions rendered simultaneously.</p>  
+<canvas id="example1" width="1400" height="50">Your browser does not support the HTML5 canvas tag.</canvas>
  
 <script src="struct_canvas.js"></script>
 <script>
-  var canvas = document.getElementById("myCanvas");
-  var struct = new Struct(canvas);
+  var canvas = document.getElementById("example0");
+  var data = [{"field_names" : ["tag", "src", "vlan", "crc", "pkt_len"],
+               "msbs" : [47, 43, 38, 37, 7],
+               "lsbs" : [44, 39, 38, 8, 0]}];
+  var config = new StructConfig();
+  var struct = new Struct(canvas, data, config);
 </script>
+
+<script>
+  var canvas = document.getElementById("example1");
+  var data = [{"field_names" : ["a", "b", "c", "d", "e", "f"],
+               "msbs" : [63, 51, 43, 38, 37, 7],
+               "lsbs" : [52, 44, 39, 38, 8, 0]},
+              {"field_names" : ["payload"],
+               "msbs" : [63],
+               "lsbs" : [0]}];
+  var config = new StructConfig();
+  var struct = new Struct(canvas, data, config);
+</script>
+
 </body>
 </html>
