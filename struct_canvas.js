@@ -132,7 +132,7 @@ class Struct {
             for (var bit_row = 0; bit_row < this.bit_rows_required; bit_row++) {
 
                 var msb_text_align = "left";
-                var msb_x = x_start + 2;
+                var msb_x = x_start + this.pixels_per_bit / 2;
                 if (struct["msbs"][i] == struct["lsbs"][i]) {
                     msb_text_align = "center";
                     msb_x = x_center;
@@ -160,7 +160,7 @@ class Struct {
                         ctx.font = this.config.xsb_font_height.toString().concat("px Arial");
                         ctx.textAlign = "right";
                         ctx.textBaseline = "bottom";
-                        ctx.fillText(lsb_digit, x_stop - 2, bit_row_bottom);
+                        ctx.fillText(lsb_digit, x_stop - (this.pixels_per_bit / 2), bit_row_bottom);
                         ctx.closePath();
                         ctx.stroke();
                     }
