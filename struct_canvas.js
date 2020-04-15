@@ -1,18 +1,28 @@
 
 class Struct {
 
-    constructor(canvas) {
+    /**
+     * canvas: element
+     * data: list of dictionaries
+             dictionary must have three keys:
+                field_names
+                msbs
+                lsbs
+             All are lists
+    */
+    constructor(canvas, data) {
         this.canvas = canvas;
-        // Data to be passed to function
-        var names = ["foobar", "dst", "src", "vlan", "crc", "pkt_len"];
-        var msbs = [127, 51, 43, 38, 37, 7];
-        var lsbs = [52, 44, 39, 38, 8, 0];
+        this.data = data;
 
+        this.render_struct(data[0]);
+    }
+
+    render_struct(struct) {
         //var c = document.getElementById("myCanvas");
         this.canvas.width = window.innerWidth * 0.99;
-        var pixels_per_bit = this.canvas.width / (Math.max.apply(null, msbs) + 1);
+        var pixels_per_bit = this.canvas.width / (Math.max.apply(null, struct["msbs"]) + 1);
 
-        var bit_rows_required = Math.ceil(Math.log10(Math.max.apply(null, msbs)));
+        var bit_rows_required = Math.ceil(Math.log10(Math.max.apply(null, struct["msbs"])));
 
         var struct_top = 0;
 
@@ -37,11 +47,11 @@ class Struct {
         var last_box_x = 1;
         var required_padding = ctx.measureText("  ").width
 
-        for (var i = 0; i < names.length; i++) {
+        for (var i = 0; i < struct["field_names"].length; i++) {
 
-            var txt = names[i];
+            var txt = struct["field_names"][i];
             var actual_txt_width = ctx.measureText(txt).width + required_padding;
-            var bit_width = msbs[i] - lsbs[i] + 1;
+            var bit_width = struct["msbs"][i] - struct["lsbs"][i] + 1;
             var allowed_txt_width = pixels_per_bit * bit_width;
 
             if (actual_txt_width > allowed_txt_width) {
@@ -70,13 +80,13 @@ class Struct {
 
                 var msb_text_align = "left";
                 var msb_x = x_start + 2;
-                if (msbs[i] == lsbs[i]) {
+                if (struct["msbs"][i] == struct["lsbs"][i]) {
                     msb_text_align = "center";
                     msb_x = x_center;
                 }
 
                 // MSB
-                var msb_str = msbs[i].toString();
+                var msb_str = struct["msbs"][i].toString();
                 if (msb_str.length >= bit_row + 1) {
                     var msb_digit = msb_str.charAt(msb_str.length - bit_row - 1)
                     ctx.beginPath();
@@ -88,9 +98,9 @@ class Struct {
                     ctx.stroke();
                 }
 
-                if (msbs[i] != lsbs[i]) {
+                if (struct["msbs"][i] != struct["lsbs"][i]) {
                     // LSB
-                    var lsb_str = lsbs[i].toString();
+                    var lsb_str = struct["lsbs"][i].toString();
                     if (lsb_str.length >= bit_row + 1) {
                         var lsb_digit = lsb_str.charAt(lsb_str.length - bit_row - 1)
                         ctx.beginPath();
