@@ -2,14 +2,15 @@
 class Struct {
 
     constructor(canvas) {
+        this.canvas = canvas;
         // Data to be passed to function
         var names = ["foobar", "dst", "src", "vlan", "crc", "pkt_len"];
         var msbs = [127, 51, 43, 38, 37, 7];
         var lsbs = [52, 44, 39, 38, 8, 0];
 
         //var c = document.getElementById("myCanvas");
-        canvas.width = window.innerWidth * 0.99;
-        var pixels_per_bit = canvas.width / (Math.max.apply(null, msbs) + 1);
+        this.canvas.width = window.innerWidth * 0.99;
+        var pixels_per_bit = this.canvas.width / (Math.max.apply(null, msbs) + 1);
 
         var bit_rows_required = Math.ceil(Math.log10(Math.max.apply(null, msbs)));
 
@@ -25,11 +26,11 @@ class Struct {
 
         // Readjust canvas height to make sure it fits
         // May not want to do this if this is just a function that gets applied to the same canvas
-        canvas.height = bar_top + bar_height;
+        this.canvas.height = bar_top + bar_height;
 
-        var ctx = canvas.getContext("2d");
+        var ctx = this.canvas.getContext("2d");
         ctx.beginPath();
-        ctx.rect(0, bar_top, canvas.width, bar_height);
+        ctx.rect(0, bar_top, this.canvas.width, bar_height);
         ctx.closePath();
         ctx.stroke();
 
