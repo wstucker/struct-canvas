@@ -128,13 +128,16 @@ class Struct {
             ctx.closePath();
             ctx.stroke();
 
+            ctx.beginPath();
+            ctx.font = this.config.xsb_font_height.toString().concat("px Arial");
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
             var bit_row_bottom = bar_top;
             for (var bit_row = 0; bit_row < this.bit_rows_required; bit_row++) {
 
                 var msb_text_align = "left";
                 var msb_x = x_start + this.pixels_per_bit / 2;
                 if (struct["msbs"][i] == struct["lsbs"][i]) {
-                    msb_text_align = "center";
                     msb_x = x_center;
                 }
 
@@ -142,13 +145,7 @@ class Struct {
                 var msb_str = struct["msbs"][i].toString();
                 if (msb_str.length >= bit_row + 1) {
                     var msb_digit = msb_str.charAt(msb_str.length - bit_row - 1)
-                    ctx.beginPath();
-                    ctx.font = this.config.xsb_font_height.toString().concat("px Arial");
-                    ctx.textAlign = msb_text_align;
-                    ctx.textBaseline = "bottom";
                     ctx.fillText(msb_digit, msb_x, bit_row_bottom);
-                    ctx.closePath();
-                    ctx.stroke();
                 }
 
                 if (struct["msbs"][i] != struct["lsbs"][i]) {
@@ -156,18 +153,14 @@ class Struct {
                     var lsb_str = struct["lsbs"][i].toString();
                     if (lsb_str.length >= bit_row + 1) {
                         var lsb_digit = lsb_str.charAt(lsb_str.length - bit_row - 1)
-                        ctx.beginPath();
-                        ctx.font = this.config.xsb_font_height.toString().concat("px Arial");
-                        ctx.textAlign = "right";
-                        ctx.textBaseline = "bottom";
                         ctx.fillText(lsb_digit, x_stop - (this.pixels_per_bit / 2), bit_row_bottom);
-                        ctx.closePath();
-                        ctx.stroke();
                     }
                 }
                 bit_row_bottom = bit_row_bottom - this.config.xsb_font_height;
 
             }
+            ctx.closePath();
+            ctx.stroke();
 
         }
         this.last_rendered_y = bar_top + this.config.bar_height + this.config.bar_spacer_height;
