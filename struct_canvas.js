@@ -3,6 +3,7 @@ class StructConfig {
     constructor() {
         // Reset the canvas width to maximum visible width
         this.resize_to_window_width = true;
+        this.resize_to_window_width_scale = 0.95;
         // Size of MSB and LSB numbering font above struct bar in pixels
         this.xsb_font_height = 10;
         // Height of struct bar in pixels
@@ -32,7 +33,7 @@ class Struct {
 
         if (this.config.resize_to_window_width) {
             // There's probably a better way to do this
-            this.canvas.width = window.innerWidth * 0.99;
+            this.canvas.width = window.innerWidth * this.config.resize_to_window_width_scale;
         }
 
         this.last_rendered_y = 0;
